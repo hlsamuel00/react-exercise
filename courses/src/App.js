@@ -1,4 +1,4 @@
-const Course = ({course}) => {
+const Header = ({course}) => {
   return (
     <header>
       <h1>{course}</h1>
@@ -6,14 +6,39 @@ const Course = ({course}) => {
   )
 }
 
+const Part = ({part}) => {
+  console.log(part)
+  return (
+    <p><strong>Part:</strong> {part.name} | <strong>Number of Exercises:</strong> {part.exercises}</p>
+  )
+}
+
+const Footer = ({parts}) => {
+  return (
+    <footer><strong>Total number of exercises:</strong> {parts.map(part => part.exercises).reduce((acc,c) => acc + c, 0)} </footer>
+  )
+}
 const Content = ({parts}) => {
-  console.log(parts)
+  return (
+    <div>
+      {parts.map(part =>
+        <Part key={part.id} part={part} />
+      )}
+    </div>
+  )
+}
+
+const Course = ({course}) => {
   return (
     <>
-      {parts.map(part => <p key={part.id}><strong>Part:</strong> {part.name} | <strong>Number of Exercises:</strong> {part.exercises}</p>)}
+      <Header course={course.name} />
+      <Content parts={course.parts} />
+      <Footer parts={course.parts} />
     </>
   )
 }
+
+
 
 const Total = ({parts}) => {
   return (
@@ -43,9 +68,7 @@ const App = () => {
 
   return (
     <div>
-      <Course course = {course.name}/>
-      <Content parts = {course.parts}/>
-      <Total parts = {course.parts}/>
+      <Course course={course}/>
     </div>
   )
 }
