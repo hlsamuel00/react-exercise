@@ -1,19 +1,9 @@
 import {useState} from 'react'
+import Search from './components/Search'
+import Add from './components/Add'
+import PhoneBook from './components/Persons'
 
-const Entry = ({name, number}) => {
-  return (
-    <p>Name: {name} | Number: {number}</p>
-  )
-}
 
-const PhoneBook = ({persons}) => {
-  return (
-    <div>
-      {persons.map(person => 
-        <Entry key={person.name} name={person.name} number={person.number} />)}
-    </div>
-  )
-}
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -63,13 +53,10 @@ const App = () => {
   return (
     <div>
         <h2>PhoneBook</h2>
-        <div>filter shown with <input value={search} onChange={handleSearch} /></div>
+        <Search search={search} handleSearch={handleSearch} />
         <h2>add a new</h2>
-        <form onSubmit={addPerson} >
-          <div> name: <input value={newName} onChange={handleNameChange} /></div>
-          <div> number: <input value={newNumber} onChange={handleNumberChange} /></div>
-          <div> <button type='submit'>add</button> </div>
-        </form>
+        <Add newName={newName} handleNameChange={handleNameChange} addPerson={addPerson}
+             newNumber={newNumber} handleNumberChange={handleNumberChange} />
         <h2>Numbers</h2>
         <PhoneBook persons={personsToShow} />
     </div>
