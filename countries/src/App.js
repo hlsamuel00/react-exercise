@@ -1,14 +1,8 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import Search from './components/Search'
+import Countries from './components/Countries'
 
-const Countries = (props) => {
-  return (
-    <>
-
-    </>
-  )
-}
 
 const App = () => {
   const [countries, setCountries] = useState([])
@@ -24,10 +18,10 @@ const App = () => {
   }, [])
 
   const handleSearch = (event) => {
-    setSearch(event.target.value)
+    setSearch(event.target.value.toLowerCase())
   }
 
-  const countriesToShow = countries
+  const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(search))
 
   return (
     <>
