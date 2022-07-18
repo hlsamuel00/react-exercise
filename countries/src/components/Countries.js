@@ -1,4 +1,6 @@
-const Countries = ({countries}) => {
+import Button from "./Button"
+
+const Countries = ({countries, setSearch}) => {
     if (countries.length > 10){
       return (
         <>
@@ -9,7 +11,7 @@ const Countries = ({countries}) => {
     if (countries.length < 10 && countries.length > 1){
       return (
         <>
-          {countries.map(country => <p key={country.name.common}>{country.name.common}</p>)}
+          {countries.map(country => <p key={country.name.common}>{country.name.common}<Button handleClick={() => console.log('button clicked')} text='show' /></p>)}
         </>
       )
     }

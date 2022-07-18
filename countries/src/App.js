@@ -21,12 +21,13 @@ const App = () => {
     setSearch(event.target.value.toLowerCase())
   }
 
+
   const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(search))
 
   return (
     <>
       <Search search={search} handleSearch={handleSearch}/>
-      <Countries countries={countriesToShow}/>
+      <Countries countries={countriesToShow} />
     </>
   )
 
