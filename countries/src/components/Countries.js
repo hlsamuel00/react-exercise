@@ -1,6 +1,7 @@
 import Button from "./Button"
+import Search from "./Search"
 
-const Countries = ({countries, setSearch}) => {
+const Countries = ({countries, search}) => {
     if (countries.length > 10){
       return (
         <>
