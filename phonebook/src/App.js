@@ -3,6 +3,7 @@ import phonebookService from './services/persons'
 import Search from './components/Search'
 import Add from './components/Add'
 import PhoneBook from './components/Persons'
+import Notification from './components/Notifications'
 
 
 
@@ -10,7 +11,8 @@ const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const[search, setSearch] = useState('')
+  const [search, setSearch] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     phonebookService
@@ -41,6 +43,8 @@ const App = () => {
           .update(id, changedPerson)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.name != newName ? person : returnedPerson))
+            setNotification(`${newName}'s contact information has been updated!`)
+            setTimeout(() => setNotification(null), 5000)
             setNewName('')
             setNewNumber('')
           })
@@ -49,6 +53,8 @@ const App = () => {
           .create(personObject)
           .then(returnedPerson => {
             setPersons(persons.concat(returnedPerson))
+            setNotification(`Added ${newName} to phonebook!`)
+            setTimeout(() => setNotification(null), 5000)
             setNewName('')
             setNewNumber('')
           })
@@ -61,27 +67,30 @@ const App = () => {
       .deleteOne(id)
       .then(res => {
         window.confirm(`Delete ${name}?`)
+        setNotification(`${name} removed from phonebook!`)
+        setTimeout(() => setNotification(null), 5000)
         setPersons(persons.filter(person => person.id != id))
       })
   }
 
   const handleNameChange = (event) => {
-    setNewName(event.target.value.toLowerCase())
+    setNewName(event.target.value)
   }
 
   const handleNumberChange = (event) => {
-    setNewNumber(event.target.value.toLowerCase())
+    setNewNumber(event.target.value)
   }
 
   const handleSearch = (event) => {
-    setSearch(event.target.value.toLowerCase())
+    setSearch(event.target.value)
   }
 
-  const personsToShow = persons.filter(person => person.name.toLowerCase().includes(search)) || persons
+  const personsToShow = persons.filter(person => person.name.toLowerCase().includes(search.toLocaleLowerCase())) || persons
 
   return (
     <div>
         <h2>PhoneBook</h2>
+        <Notification message={notification} />
         <Search search={search} handleSearch={handleSearch} />
         <h2>add a new</h2>
         <Add newName={newName} handleNameChange={handleNameChange} addPerson={addPerson}
