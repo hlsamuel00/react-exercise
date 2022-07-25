@@ -20,7 +20,7 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    
+
     const personObject = {
       name: newName,
       number: newNumber
@@ -43,6 +43,15 @@ const App = () => {
     } 
   }
 
+  const removePerson = (id, name) => {
+    phonebookService
+      .deleteOne(id)
+      .then(res => {
+        window.confirm(`Delete ${name}?`)
+        setPersons(persons.filter(person => person.id != id))
+      })
+  }
+  
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -65,7 +74,11 @@ const App = () => {
         <Add newName={newName} handleNameChange={handleNameChange} addPerson={addPerson}
              newNumber={newNumber} handleNumberChange={handleNumberChange} />
         <h2>Numbers</h2>
-        <PhoneBook persons={personsToShow} />
+        <section>
+          {personsToShow.map(person => 
+            <PhoneBook key={person.id} name={person.name} number={person.number} removeOne={() => removePerson(person.id, person.name)} />
+          )}
+        </section>
     </div>
   )
 }

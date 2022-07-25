@@ -1,15 +1,10 @@
-const Entry = ({name, number}) => {
-    return (
-      <p>Name: {name} | Number: {number}</p>
-    )
-}
-  
-const PhoneBook = ({persons}) => {
+import { FaTrashAlt} from 'react-icons/fa'
+
+const PhoneBook = ({name, number, removeOne}) => {
   return (
-    <div>
-      {persons.map(person => 
-        <Entry key={person.name} name={person.name} number={person.number} />)}
-    </div>
+    <>
+      <p>Name: {name} | Number: {number} <button onClick={removeOne}><FaTrashAlt/></button></p>
+    </>
   )
 }
 
