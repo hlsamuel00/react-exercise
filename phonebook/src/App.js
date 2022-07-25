@@ -27,10 +27,23 @@ const App = () => {
     }
 
     if (newName && newNumber){
-      if (persons.map(person => person.name).includes(newName)){
-        alert(`${newName} is already added to phonebook`)
+      if (persons.map(p => p.name).includes(newName) && persons.map(p => p.number).includes(newNumber)){
+        alert(`${newName} is already in phonebook`)
         setNewName('')
         setNewNumber('')
+      } else if (persons.map(person => person.name).includes(newName)){
+        const person = persons.find(person => person.name.toLowerCase() == newName.toLowerCase())
+        const changedPerson = {...person, number: newNumber}
+        const id = person.id
+
+        window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+        phonebookService
+          .update(id, changedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.name != newName ? person : returnedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
       } else {
         phonebookService
           .create(personObject)
@@ -51,17 +64,17 @@ const App = () => {
         setPersons(persons.filter(person => person.id != id))
       })
   }
-  
+
   const handleNameChange = (event) => {
-    setNewName(event.target.value)
+    setNewName(event.target.value.toLowerCase())
   }
 
   const handleNumberChange = (event) => {
-    setNewNumber(event.target.value)
+    setNewNumber(event.target.value.toLowerCase())
   }
 
   const handleSearch = (event) => {
-    setSearch(event.target.value)
+    setSearch(event.target.value.toLowerCase())
   }
 
   const personsToShow = persons.filter(person => person.name.toLowerCase().includes(search)) || persons
@@ -74,11 +87,9 @@ const App = () => {
         <Add newName={newName} handleNameChange={handleNameChange} addPerson={addPerson}
              newNumber={newNumber} handleNumberChange={handleNumberChange} />
         <h2>Numbers</h2>
-        <section>
           {personsToShow.map(person => 
             <PhoneBook key={person.id} name={person.name} number={person.number} removeOne={() => removePerson(person.id, person.name)} />
           )}
-        </section>
     </div>
   )
 }
