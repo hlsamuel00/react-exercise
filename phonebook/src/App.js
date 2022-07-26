@@ -13,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
   const [notification, setNotification] = useState(null)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     phonebookService
@@ -48,6 +49,17 @@ const App = () => {
             setNewName('')
             setNewNumber('')
           })
+          .catch(err => {
+            setError(true)
+            setNotification(
+              `${newName} was already removed from server`
+            )
+            setTimeout(() => {
+              setNotification(null)
+              setError(false)
+            }, 5000)
+            setNotes(notes.filter(note => note.id !== id))
+          })
       } else {
         phonebookService
           .create(personObject)
@@ -71,6 +83,17 @@ const App = () => {
         setTimeout(() => setNotification(null), 5000)
         setPersons(persons.filter(person => person.id != id))
       })
+      .catch(err => {
+        setError(true)
+        setPersons(persons.filter(person => person.id != id))
+        setNotification(
+          `${name} was already removed from server`
+        )
+        setTimeout(() => {
+          setNotification(null)
+          setError(false)
+        }, 5000)
+      })
   }
 
   const handleNameChange = (event) => {
@@ -90,7 +113,7 @@ const App = () => {
   return (
     <div>
         <h2>PhoneBook</h2>
-        <Notification message={notification} />
+        <Notification message={notification} error={error}/>
         <Search search={search} handleSearch={handleSearch} />
         <h2>add a new</h2>
         <Add newName={newName} handleNameChange={handleNameChange} addPerson={addPerson}
