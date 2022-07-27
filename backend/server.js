@@ -42,6 +42,11 @@ app.get('/api/persons/:id', (req, res) => {
     person ? res.json(person) : res.status(404).json({error: 'Invalid Entry'})
 })
 
+app.delete('/api/persons/:id', (req,res) => {
+  persons = persons.filter(person => person.id !== parseInt(req.params.id))
+  res.status(204).end()
+})
+
 const PORT = 8888
 app.listen(PORT, () => {
     console.log(`Server is running on Port: ${PORT}; you better go catch it!!`)
