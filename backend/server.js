@@ -47,6 +47,28 @@ app.delete('/api/persons/:id', (req,res) => {
   res.status(204).end()
 })
 
+app.post('api/persons', (req,res) => {
+  const body = req.body
+  const person = {
+    id: persons.length + 1,
+    name: body.name,
+    number: body.number
+  }
+
+  if (!body.name || !body.number){
+    res.status(404).json({error: 'Content Missing'})
+  }
+  if (persons.map(person => person.name.toLowerCase()).includes(body.name.toLowerCase())){
+    res.status(404).json({error: 'name must be unique'})
+  } 
+  if (persons.map(person => person.number).includes(body.number)){
+    res.status(404).json({error: 'number must be unique'})
+  }
+  
+  res.json(person)
+
+})
+
 const PORT = 8888
 app.listen(PORT, () => {
     console.log(`Server is running on Port: ${PORT}; you better go catch it!!`)
