@@ -47,25 +47,24 @@ app.delete('/api/persons/:id', (req,res) => {
   res.status(204).end()
 })
 
-app.post('api/persons', (req,res) => {
+app.post('/api/persons', (req,res) => {
   const body = req.body
   const person = {
     id: persons.length + 1,
     name: body.name,
     number: body.number
   }
-
   if (!body.name || !body.number){
     res.status(404).json({error: 'Content Missing'})
   }
-  if (persons.map(person => person.name.toLowerCase()).includes(body.name.toLowerCase())){
+  else if (persons.map(person => person.name.toLowerCase()).includes(body.name.toLowerCase())){
     res.status(404).json({error: 'name must be unique'})
   } 
-  if (persons.map(person => person.number).includes(body.number)){
+  else if (persons.map(person => person.number).includes(body.number)){
     res.status(404).json({error: 'number must be unique'})
   }
-  
-  res.json(person)
+  persons = persons.concat(person)
+    res.json(person)
 
 })
 
